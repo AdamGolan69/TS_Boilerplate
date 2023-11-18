@@ -1,4 +1,4 @@
-import { PageBase, PageDecorator } from "../../../decorators/page";
+import { PageBase, PageDecorator } from "@decorators";
 import { Header } from "./header/header";
 import { JoinUs } from "./join-us/join-us";
 

@@ -9,7 +9,7 @@ export class State {
         return this.data[name];
     }
     publish(name: string, ...args: any[]): void {
-        this.subscribers[name].forEach(func => func(args));
+        this.subscribers[name].forEach(func => func(...args));
     }
     subscribe(name: string, func: (...args: any[]) => void): void {
         this.subscribers[name]?.length

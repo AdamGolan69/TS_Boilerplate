@@ -1,4 +1,4 @@
-import { PageBase, PageDecorator } from "../../../decorators/page";
+import { PageBase, PageDecorator } from "@decorators";
 
 @PageDecorator
 export class Contact extends PageBase {

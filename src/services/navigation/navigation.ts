@@ -1,8 +1,8 @@
-import { Contact } from "../../app/pages/contact-us/contact-us";
-import { Home } from "../../app/pages/home/home";
+import { Contact } from "@app/pages/contact-us/contact-us";
+import { Home } from "@app/pages/home/home";
 
 export class Navigation {
-    pages: {[k: string]: any} = {
+    pages: { [k: string]: typeof HTMLElement } = {
         '/': Home,
         '/home': Home,
         '/contact-us': Contact,
@@ -22,12 +22,13 @@ export class Navigation {
     get protocol() {
         return location.protocol;
     }
-    constructor() {
-        console.log(navigator);
-        console.log(location);
+
+    getPage(page = this.pathname.toLocaleLowerCase()): typeof HTMLElement {
+        return this.pages[page] ?? Home;
     }
 
-    getPage() {
-        return this.pages[this.pathname.toLocaleLowerCase()] ?? Home;
+    getClickedPage(page: string): typeof HTMLElement {
+        window.history.pushState(null, '', page);
+        return this.getPage(page);
     }
 }

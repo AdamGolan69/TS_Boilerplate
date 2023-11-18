@@ -1,4 +1,4 @@
-import { ModuleBase, ModuleDecorator } from "../../../../decorators/module";
+import { ModuleBase, ModuleDecorator } from "@decorators";
 import { SubTitle } from "./sub-title/sub-title";
 import { Title } from "./title/title";
 
