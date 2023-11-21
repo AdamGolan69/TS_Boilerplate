@@ -1,8 +1,9 @@
 import { Contact } from "@app/pages/contact-us/contact-us";
 import { Home } from "@app/pages/home/home";
+import { PageBase } from "@decorators";
 
 export class Navigation {
-    pages: { [k: string]: typeof HTMLElement } = {
+    pages: { [k: string]: typeof PageBase } = {
         '/': Home,
         '/home': Home,
         '/contact-us': Contact,
@@ -23,12 +24,11 @@ export class Navigation {
         return location.protocol;
     }
 
-    getPage(page = this.pathname.toLocaleLowerCase()): typeof HTMLElement {
-        return this.pages[page] ?? Home;
+    getPage(): typeof PageBase {
+        return this.pages[this.pathname.toLocaleLowerCase()] ?? Home;
     }
 
-    getClickedPage(page: string): typeof HTMLElement {
+    getClickedPage(page: string): void {
         window.history.pushState(null, '', page);
-        return this.getPage(page);
     }
 }

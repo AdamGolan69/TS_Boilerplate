@@ -6,6 +6,7 @@ export function PageDecorator(target: CustomElementConstructor) {
 }
 
 export abstract class PageBase extends Base {
+    appState: State;
     pageState = new State();
     constructor() {
         super();
