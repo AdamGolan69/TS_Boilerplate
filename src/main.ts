@@ -15,31 +15,33 @@ class Main {
   constructor() {
     setTimeout(() => this.init(), 0);
   }
-  
+
   private init() {
     document.body.prepend(new Navbar(this.appState));
-    this.loadIt();
-    this.subscribes();
+    if (this.app) {
+      this.loadIt();
+      this.subscribes();
+    } else console.error('No app element!');
   }
-  
+
   private loadIt(): void {
     this.app?.replaceChildren(this.loader);
-    this.loadingPage = new (this.navigation.getPage() as const);
+    this.loadingPage = new (this.navigation.getPage() as any);
     this.loadingPage.appState = this.appState;
   }
-  
+
   private stateNavigate(page: string): void {
     this.navigation.getClickedPage(page);
     this.loadIt();
   }
 
-  private loadPage (): void {
+  private loadPage(): void {
     this.app?.replaceChildren(this.loadingPage);
   }
-  
+
   private subscribes(): void {
     window.addEventListener('popstate', () => this.loadIt());
-    // this.appState.setData('language', this.i18n.lang);
+    this.appState.setData('language', this.i18n);
     this.appState.subscribe(StateKeys.stateNavigate, this.stateNavigate.bind(this));
     this.appState.subscribe(StateKeys.pageContentLoaded, this.loadPage.bind(this));
   }
