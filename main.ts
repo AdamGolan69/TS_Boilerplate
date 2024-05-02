@@ -7,32 +7,39 @@ import { PageBase } from "@decorators";
 import './style/dist/style.css';
 
 class Main {
-  app = document.getElementById('app');
+  app = document.getElementById('app') ?? this.createApp();
   loader = new Loader();
   device = new Device();
   appState = new State();
   navigation = new Navigation();
   i18n = new Language();
-  loadingPage: PageBase;
+  loadingPage: PageBase<any>;
   constructor() {
-    setTimeout(() => this.init(), 0);
+    this.init();
+  }
+
+  private createApp(): HTMLDivElement {
+    const app = document.createElement('div');
+    app.id = 'app';
+    document.body.replaceChildren(app);
+    return app;
   }
 
   private init() {
+    this.appState.setData(StateKeys.lang, this.i18n);
+    this.appState.setData(StateKeys.nav, this.navigation);
     document.body.prepend(new Navbar(this.appState));
-    if (this.app) {
-      this.loadIt();
-      this.subscribes();
-    } else console.error('No app element!');
+    this.loadIt();
+    this.subscribes();
   }
 
   private loadIt(): void {
     this.app?.replaceChildren(this.loader);
-    this.loadingPage = new (this.navigation.getPage() as any);
-    this.loadingPage.appState = this.appState;
+    this.loadingPage = new (this.navigation.getPage() as any)(this.appState);
   }
 
   private stateNavigate(page: string): void {
+    if (this.navigation.pathname.includes(page)) return;
     this.navigation.getClickedPage(page);
     this.loadIt();
   }
@@ -43,13 +50,12 @@ class Main {
 
   private subscribes(): void {
     window.addEventListener('popstate', () => this.loadIt());
-    this.appState.setData('language', this.i18n);
     this.appState.subscribe(StateKeys.stateNavigate, this.stateNavigate.bind(this));
     this.appState.subscribe(StateKeys.pageContentLoaded, this.loadPage.bind(this));
     this.appState.subscribe(StateKeys.openModal, this.openModal.bind(this));
   }
 
-  private openModal(content: any): void {
+  private openModal(inner: any): void {
     const dialog = document.createElement('dialog');
     const closeBtn = document.createElement('span');
     const closeModal = () => {
@@ -59,7 +65,7 @@ class Main {
     closeBtn.className = 'close';
     closeBtn.onclick = () => closeModal();
     dialog.className = 'modal';
-    dialog.append(content);
+    dialog.append(inner);
     dialog.onclick = ({ clientX, clientY }) => {
       const { top, left, width, height } = dialog.getBoundingClientRect();
       const isInDialog = (top <= clientY && clientY <= top + height && left <= clientX && clientX <= left + width);
