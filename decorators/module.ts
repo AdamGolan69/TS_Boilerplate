@@ -5,6 +5,11 @@ export function ModuleDecorator(target: CustomElementConstructor) {
     Enlist('module', target);
 }
 
-export abstract class ModuleBase extends PageBlockBase {
+export abstract class ModuleBase<IText = any> extends PageBlockBase<IText> {
     moduleState = new State();
+
+    constructor() {
+        super();
+        this.dataset.type = 'module';
+    }
 }

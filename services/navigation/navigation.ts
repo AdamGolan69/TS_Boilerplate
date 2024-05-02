@@ -3,7 +3,7 @@ import { Home } from "@app/pages/home/home";
 import { PageBase } from "@decorators";
 
 export class Navigation {
-    pages: { [k: string]: typeof PageBase } = {
+    pages: { [k: string]: typeof PageBase<any> } = {
         '/': Home,
         '/home': Home,
         '/contact-us': Contact,

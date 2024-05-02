@@ -1,8 +1,10 @@
 import { Device, Language, Navigation, State } from "@services";
-import { Navbar } from "@app/kit/navbar/navbar";
+import { Navbar } from "@app/kit/link-based/navbar/navbar";
 import { StateKeys } from "@services/state/config";
 import { Loader } from "@app/kit/loader/lodaer";
 import { PageBase } from "@decorators";
+
+import './style/dist/style.css';
 
 class Main {
   app = document.getElementById('app');
@@ -44,6 +46,28 @@ class Main {
     this.appState.setData('language', this.i18n);
     this.appState.subscribe(StateKeys.stateNavigate, this.stateNavigate.bind(this));
     this.appState.subscribe(StateKeys.pageContentLoaded, this.loadPage.bind(this));
+    this.appState.subscribe(StateKeys.openModal, this.openModal.bind(this));
+  }
+
+  private openModal(content: any): void {
+    const dialog = document.createElement('dialog');
+    const closeBtn = document.createElement('span');
+    const closeModal = () => {
+      dialog.close();
+      this.app?.removeChild(dialog);
+    }
+    closeBtn.className = 'close';
+    closeBtn.onclick = () => closeModal();
+    dialog.className = 'modal';
+    dialog.append(content);
+    dialog.onclick = ({ clientX, clientY }) => {
+      const { top, left, width, height } = dialog.getBoundingClientRect();
+      const isInDialog = (top <= clientY && clientY <= top + height && left <= clientX && clientX <= left + width);
+      if (!isInDialog) closeModal();
+    }
+    dialog.append(closeBtn);
+    this.app?.append(dialog);
+    dialog.showModal();
   }
 }
 
