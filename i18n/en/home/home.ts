@@ -1,3 +1,4 @@
 export const home = {
-    HEADER: 'welcome'
+    HEADER: 'welcome',
+    FOOTER: 'footer'
 }
