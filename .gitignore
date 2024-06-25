@@ -1,5 +1,4 @@
 # .gitignore for 'TS_Boilerplate'
 dist
 node_modules
-pages/*
 /package-lock.json
