@@ -26,7 +26,7 @@ export class Timer {
         const seconds = timeDiff % 60;
         const minutes = timeDiff > 60 ? Math.floor(timeDiff / 60) : 0;
         const hours = timeDiff > 3600 ? Math.floor(timeDiff / 3600) : 0;
-        const duration = `${this.addZero(hours)}${hours}:${this.addZero(minutes)}${minutes}:${this.addZero(seconds)}${seconds}`;
+        const duration = `${this.addZero(hours)}:${this.addZero(minutes)}:${this.addZero(seconds)}`;
         setTimeout(()=> this.reset());
         return {
             start: {
